@@ -1,0 +1,13 @@
+com/dmba/repository/UserAddressRepository.class
+com/dmba/MyApplication.class
+com/dmba/dao/User.class
+com/dmba/dao/UserAddress.class
+com/dmba/repository/UsersOrderRepository.class
+com/dmba/rabbit/UsersOrderConsumer.class
+com/dmba/repository/ProductRepository.class
+com/dmba/configuration/RabbitMQConfig.class
+com/dmba/dao/OrderList.class
+com/dmba/repository/UserRepository.class
+com/dmba/dao/User$Role.class
+com/dmba/dao/Product.class
+com/dmba/dao/UsersOrder.class

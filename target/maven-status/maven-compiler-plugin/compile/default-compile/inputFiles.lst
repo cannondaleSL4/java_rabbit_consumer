@@ -1,0 +1,13 @@
+/home/dima/components/test_app/test_app/src/main/java/com/dmba/dao/UserAddress.java
+/home/dima/components/test_app/test_app/src/main/java/com/dmba/MyApplication.java
+/home/dima/components/test_app/test_app/src/main/java/com/dmba/configuration/RabbitMQConfig.java
+/home/dima/components/test_app/test_app/src/main/java/com/dmba/rabbit/MessageConsumer.java
+/home/dima/components/test_app/test_app/src/main/java/com/dmba/dao/OrderList.java
+/home/dima/components/test_app/test_app/src/main/java/com/dmba/repository/UserAddressRepository.java
+/home/dima/components/test_app/test_app/src/main/java/com/dmba/repository/ProductRepository.java
+/home/dima/components/test_app/test_app/src/main/java/com/dmba/dao/UsersOrder.java
+/home/dima/components/test_app/test_app/src/main/java/com/dmba/rabbit/UsersOrderConsumer.java
+/home/dima/components/test_app/test_app/src/main/java/com/dmba/repository/UserRepository.java
+/home/dima/components/test_app/test_app/src/main/java/com/dmba/dao/Product.java
+/home/dima/components/test_app/test_app/src/main/java/com/dmba/repository/UsersOrderRepository.java
+/home/dima/components/test_app/test_app/src/main/java/com/dmba/dao/User.java
