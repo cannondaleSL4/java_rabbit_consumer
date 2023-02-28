@@ -20,8 +20,8 @@ public class UsersOrderConsumer {
     @Autowired
     private Storage storage;
 
-    @Autowired
-    private TaskExecutor taskExecutor;
+//    @Autowired
+//    private TaskExecutor taskExecutor;
 
     @Value("${spring.rabbitmq.name}")
     private String queue;
