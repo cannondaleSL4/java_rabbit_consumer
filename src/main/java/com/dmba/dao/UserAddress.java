@@ -13,7 +13,7 @@ import javax.persistence.*;
 public class UserAddress {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "address_id")
+    @Column(name = "id")
     private Long addressId;
 
     @Column(name = "zip_code")

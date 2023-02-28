@@ -30,15 +30,17 @@ CREATE TABLE Product (
 );
 
 CREATE TABLE Users_Order (
-    id UUID PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
+    uuid UUID,
     timestamp BIGINT,
     user_id INTEGER REFERENCES User_Table(id),
     address_id INTEGER REFERENCES User_Address(id),
     payed BOOLEAN,
-    account_total FLOAT
+    account_total FLOAT,
+    UNIQUE(uuid)
 );
 
 CREATE TABLE Users_Order_Product (
-    order_id UUID REFERENCES Users_Order(id),
+    order_id INTEGER REFERENCES Users_Order(id),
     product_id INTEGER REFERENCES Product(id)
 );

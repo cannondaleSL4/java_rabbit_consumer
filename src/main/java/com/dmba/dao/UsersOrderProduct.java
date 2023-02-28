@@ -1,25 +1,23 @@
 package com.dmba.dao;
 
-import lombok.Builder;
-
 import javax.persistence.*;
 
 @Entity
 @Table(name = "Users_Order_Product")
-@Builder
 public class UsersOrderProduct {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_id")
+    @JoinColumn(name = "order_id", referencedColumnName = "id")
     private UsersOrder usersOrder;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Product product;
 
-    // constructors, getters, and setters
+    // Constructor, getters, and setters
 }

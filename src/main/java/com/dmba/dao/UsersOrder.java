@@ -19,28 +19,30 @@ import java.util.UUID;
 public class UsersOrder {
 
     @Id
-    @Column(name = "id", columnDefinition = "uuid")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "uuid")
     private UUID uuid;
 
-    @Column(name = "time_stamp")
-    private Timestamp timeStamp;
+    @Column(name = "timestamp")
+    private Long timeStamp;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//    @JoinColumn(name = "address_id")
+    @JoinColumn(name = "address_id")
     private UserAddress userAddress;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User user;
 
-//    @OneToMany(mappedBy = "usersOrder", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<UsersOrderProductEntity> orderList;
-
-//   @OneToMany(mappedBy = "Product", cascade = CascadeType.ALL, orphanRemoval = true)
-    @OneToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "users_order_product",
+            joinColumns = @JoinColumn(name = "order_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id"))
     private List<Product> productList = new ArrayList<>();
 
-    @Column(name = "is_payed")
+    @Column(name = "payed")
     private Boolean isPayed;
 
     @Column(name = "account_total")
@@ -48,7 +50,7 @@ public class UsersOrder {
 
     public UsersOrder(UsersOrderProto.UsersOrder order) {
         this.uuid = UUID.fromString(order.getUuid().getValue());
-        this.timeStamp = new Timestamp(order.getTimeStamp());
+        this.timeStamp = Long.valueOf(order.getTimeStamp());
         this.accountTotal = order.getAccountTotal();
         this.isPayed = order.getPayed();
 
