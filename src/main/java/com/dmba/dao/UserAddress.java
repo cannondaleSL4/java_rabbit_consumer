@@ -1,8 +1,6 @@
 package com.dmba.dao;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -10,12 +8,13 @@ import javax.persistence.*;
 @Setter
 @Entity
 @Table(name = "user_address")
-@Builder
-public class UserAddressEntity {
+@AllArgsConstructor
+@NoArgsConstructor
+public class UserAddress {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+    @Column(name = "address_id")
+    private Long addressId;
 
     @Column(name = "zip_code")
     private Integer zipCode;

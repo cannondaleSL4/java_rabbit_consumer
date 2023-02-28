@@ -2,10 +2,12 @@ package com.dmba.dao;
 
 import com.dmba.dao.proto.UsersOrderProto;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -13,72 +15,66 @@ import java.util.UUID;
 @Setter
 @Entity
 @Table(name = "users_order")
-public class UsersOrderEntity {
+@NoArgsConstructor
+public class UsersOrder {
 
     @Id
     @Column(name = "id", columnDefinition = "uuid")
     private UUID uuid;
 
-    @Column(name = "timestamp")
+    @Column(name = "time_stamp")
     private Timestamp timeStamp;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//    @JoinColumn(name = "address_id")
+    private UserAddress userAddress;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
-    private UserEntity user;
+    private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "address_id")
-    private UserAddressEntity userAddress;
+//    @OneToMany(mappedBy = "usersOrder", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<UsersOrderProductEntity> orderList;
 
-    @OneToMany(mappedBy = "usersOrder", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ProductEntity> orderList;
+//   @OneToMany(mappedBy = "Product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Product> productList = new ArrayList<>();
 
-    @Column(name = "payed")
-    private Boolean payed;
+    @Column(name = "is_payed")
+    private Boolean isPayed;
 
     @Column(name = "account_total")
     private Float accountTotal;
 
-    public UsersOrderEntity(UsersOrderProto.UsersOrder order) {
+    public UsersOrder(UsersOrderProto.UsersOrder order) {
         this.uuid = UUID.fromString(order.getUuid().getValue());
         this.timeStamp = new Timestamp(order.getTimeStamp());
         this.accountTotal = order.getAccountTotal();
-        this.payed = order.getPayed();
+        this.isPayed = order.getPayed();
 
         for (UsersOrderProto.UsersOrder.Product  product: order.getOrderList()) {
-            ProductEntity productEntity = ProductEntity.builder().
-                    title(product.getTitle()).
-                    price(product.getPrice()).
-                    cost(product.getCost()).
-                    amount(product.getAmount()).
-                    build();
-            this.orderList.add(productEntity);
+            Product productEntity = new Product(
+                    null, product.getTitle(), product.getPrice(), product.getAmount(), product.getCost());
+            this.productList.add(productEntity);
         }
 
-        UserAddressEntity userAddressEntity = UserAddressEntity.builder().
-                state(order.getAddress().getState()).
-                zipCode(order.getAddress().getZipCode()).
-                city(order.getAddress().getCity()).
-                street(order.getAddress().getStreet()).
-                country(order.getAddress().getCountry()).
-                numberHouse(order.getAddress().getNumberHouse()).
-                numberApartment(order.getAddress().getNumberApartment()).
-                build();
+        UserAddress userAddressEntity = new UserAddress(
+                null,
+                order.getAddress().getZipCode(),
+                order.getAddress().getCountry(),
+                order.getAddress().getState(),
+                order.getAddress().getCity(),
+                order.getAddress().getStreet(),
+                order.getAddress().getNumberHouse(),
+                order.getAddress().getNumberApartment()
+        );
 
         this.userAddress = userAddressEntity;
 
-        UserEntity.Role role;
-
-        if (order.getUser().getRoleValue() == 0) {
-            role = UserEntity.Role.USER;
-        } else {
-            role = UserEntity.Role.VIP_USER;
-        }
-
-        UserEntity userEntity = UserEntity.builder().
+        User userEntity = User.builder().
                 userName(order.getUser().getUserName()).
                 age(order.getUser().getAge()).
-                role(role).
+                role(order.getUser().getRole()).
                 build();
 
         this.user = userEntity;

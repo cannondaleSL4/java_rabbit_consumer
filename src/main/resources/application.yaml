@@ -9,13 +9,22 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create-drop
-    show-sql: true
+#    show-sql: true
     database-platform: org.hibernate.dialect.PostgreSQLDialect
   jackson:
     serialization:
       fail-on-empty-beans: false
     default-property-inclusion: non_null
   rabbitmq:
+    listener:
+      simple:
+        retry:
+          enabled: true
+          initial-interval: 1000
+          max-attempts: 3
+          max-interval: 10000
+          multiplier: 2.0
+          stateless: true
     exchange:
       name: javaguides_exchange
     routing:
@@ -25,6 +34,8 @@ spring:
     port: 5672
     username: guest
     password: guest
+    batch:
+      size: 1000
 
 logging:
   level:

@@ -1,40 +1,46 @@
 package com.dmba.rabbit;
 
-import com.dmba.dao.UsersOrderEntity;
+import com.dmba.dao.UsersOrder;
 import com.dmba.dao.proto.UsersOrderProto;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-//import com.dmba.dao.UsersOrder;
+
 import com.dmba.repository.UsersOrderRepository;
-import com.google.protobuf.InvalidProtocolBufferException;
+import com.dmba.storage.Storage;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Component;
-
-import java.nio.charset.StandardCharsets;
-
-//import static sun.security.util.KnownOIDs.Data;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @Slf4j
 public class UsersOrderConsumer {
 
     @Autowired
-    private UsersOrderRepository repository;
+    private Storage storage;
+
+    @Autowired
+    private TaskExecutor taskExecutor;
 
     @Value("${spring.rabbitmq.name}")
     private String queue;
 
-    @RabbitListener(queues = "${spring.rabbitmq.name}")
+    @RabbitListener(queues = "${spring.rabbitmq.name}",  concurrency = "10")
     public void onMessage(Message message) {
-        UsersOrderProto.UsersOrder usersOrder = convertMessageToMyData(message);
-        UsersOrderEntity usersOrderEntity = new UsersOrderEntity(usersOrder);
-        // Save the data in the database
-        repository.save(usersOrderEntity);
+//        UsersOrderProto.UsersOrder usersOrder = convertMessageToMyData(message);
+//        UsersOrder usersOrderEntity = new UsersOrder(usersOrder);
+//        // Save the data in the database
+//        storage.saveMessage(usersOrderEntity);
+
+        taskExecutor.execute(() -> {
+            UsersOrderProto.UsersOrder usersOrder = convertMessageToMyData(message);
+            UsersOrder usersOrderEntity = new UsersOrder(usersOrder);
+            // Save the data in the database
+            storage.saveMessage(usersOrderEntity);
+        });
     }
 
     @SneakyThrows

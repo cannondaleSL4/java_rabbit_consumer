@@ -1,8 +1,6 @@
 package com.dmba.dao;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -10,12 +8,13 @@ import javax.persistence.*;
 @Setter
 @Entity
 @Table(name = "product")
-@Builder
-public class ProductEntity {
+@AllArgsConstructor
+@NoArgsConstructor
+public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+    @Column(name = "product_id")
+    private Long productId;
 
     @Column(name = "title")
     private String title;
