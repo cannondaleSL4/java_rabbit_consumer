@@ -20,30 +20,29 @@ public class UsersOrderConsumer {
     @Autowired
     private Storage storage;
 
-//    @Autowired
-//    private TaskExecutor taskExecutor;
+    @Autowired
+    private TaskExecutor taskExecutor;
 
     @Value("${spring.rabbitmq.name}")
     private String queue;
 
-//    @RabbitListener(queues = "${spring.rabbitmq.name}",  concurrency = "10")
-//    public void onMessage(Message message) {
-//        taskExecutor.execute(() -> {
-//            UsersOrderProto.UsersOrder usersOrder = convertMessageToMyData(message);
-//            UsersOrder usersOrderEntity = new UsersOrder(usersOrder);
-//            // Save the data in the database
-//            storage.saveMessage(usersOrderEntity);
-//        });
-//    }
-
-//    @RabbitListener(queues = "${spring.rabbitmq.name}",  concurrency = "10")
-    @RabbitListener(queues = "${spring.rabbitmq.name}")
+    @RabbitListener(queues = "${spring.rabbitmq.name}",  concurrency = "3")
     public void onMessage(Message message) {
-        UsersOrderProto.UsersOrder usersOrder = convertMessageToMyData(message);
-        UsersOrder usersOrderEntity = new UsersOrder(usersOrder);
-        // Save the data in the database
-        storage.saveMessage(usersOrderEntity);
+        taskExecutor.execute(() -> {
+            UsersOrderProto.UsersOrder usersOrder = convertMessageToMyData(message);
+            UsersOrder usersOrderEntity = new UsersOrder(usersOrder);
+            // Save the data in the database
+            storage.saveMessage(usersOrderEntity);
+        });
     }
+
+//    @RabbitListener(queues = "${spring.rabbitmq.name}")
+//    public void onMessage(Message message) {
+//        UsersOrderProto.UsersOrder usersOrder = convertMessageToMyData(message);
+//        UsersOrder usersOrderEntity = new UsersOrder(usersOrder);
+//        // Save the data in the database
+//        storage.saveMessage(usersOrderEntity);
+//    }
 
     @SneakyThrows
     private UsersOrderProto.UsersOrder convertMessageToMyData(Message message) {

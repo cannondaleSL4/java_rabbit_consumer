@@ -24,9 +24,9 @@ CREATE TABLE User_Address_User (
 CREATE TABLE Product (
     id SERIAL PRIMARY KEY,
     title VARCHAR(50),
-    price FLOAT,
+    price numeric(10,2),
     amount INTEGER,
-    cost FLOAT
+    cost numeric(10,2)
 );
 
 CREATE TABLE Users_Order (
@@ -36,7 +36,7 @@ CREATE TABLE Users_Order (
     user_id INTEGER REFERENCES User_Table(id),
     address_id INTEGER REFERENCES User_Address(id),
     payed BOOLEAN,
-    account_total FLOAT,
+    account_total numeric(10,2),
     UNIQUE(uuid)
 );
 
@@ -44,3 +44,5 @@ CREATE TABLE Users_Order_Product (
     order_id INTEGER REFERENCES Users_Order(id),
     product_id INTEGER REFERENCES Product(id)
 );
+
+CREATE INDEX user_order_user_account_idx ON Users_Order (user_id, account_total DESC);

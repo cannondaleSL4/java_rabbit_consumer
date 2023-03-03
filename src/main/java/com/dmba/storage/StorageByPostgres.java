@@ -26,6 +26,7 @@ public class StorageByPostgres implements Storage {
 
     @Override
     public void saveMessage(UsersOrder usersOrderEntity) {
+        messageSet.add(usersOrderEntity);
         if (messageSet.size() >= batchSize) {
             saveMessages();
         }

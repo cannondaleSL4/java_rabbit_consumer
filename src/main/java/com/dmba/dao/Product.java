@@ -3,6 +3,7 @@ package com.dmba.dao;
 import lombok.*;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Getter
 @Setter
@@ -20,11 +21,11 @@ public class Product {
     private String title;
 
     @Column(name = "price")
-    private Float price;
+    private BigDecimal price;
 
     @Column(name = "amount")
     private Integer amount;
 
     @Column(name = "cost")
-    private Float cost;
+    private BigDecimal cost;
 }

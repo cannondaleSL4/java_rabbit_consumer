@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,17 +47,22 @@ public class UsersOrder {
     private Boolean isPayed;
 
     @Column(name = "account_total")
-    private Float accountTotal;
+    private BigDecimal accountTotal;
 
     public UsersOrder(UsersOrderProto.UsersOrder order) {
         this.uuid = UUID.fromString(order.getUuid().getValue());
         this.timeStamp = Long.valueOf(order.getTimeStamp());
-        this.accountTotal = order.getAccountTotal();
+        this.accountTotal = BigDecimal.valueOf(order.getAccountTotal());
         this.isPayed = order.getPayed();
 
         for (UsersOrderProto.UsersOrder.Product  product: order.getOrderList()) {
             Product productEntity = new Product(
-                    null, product.getTitle(), product.getPrice(), product.getAmount(), product.getCost());
+                    null,
+                    product.getTitle(),
+                    BigDecimal.valueOf(product.getPrice()),
+                    product.getAmount(),
+                    BigDecimal.valueOf(product.getCost())
+            );
             this.productList.add(productEntity);
         }
 
